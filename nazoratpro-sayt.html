@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NazoratPro — Biznesingizni aqlli boshqaring</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #04060f;
+    --bg2: #070c1a;
+    --card: #0b1225;
+    --border: rgba(99,179,237,0.12);
+    --accent: #38bdf8;
+    --accent2: #818cf8;
+    --gold: #f59e0b;
+    --green: #34d399;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999; opacity: .5;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%; height: 68px;
+    background: rgba(4,6,15,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--font-head);
+    font-size: 22px; font-weight: 900;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 14px; font-weight: 500;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--accent), #0ea5e9);
+    color: #fff; border: none; border-radius: 10px;
+    padding: 10px 22px; font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: var(--font-body);
+    box-shadow: 0 0 20px rgba(56,189,248,0.3);
+    transition: transform .2s, box-shadow .2s;
+    white-space: nowrap;
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 0 32px rgba(56,189,248,0.5); }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 100px 5% 80px;
+    position: relative; overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+  }
+  .glow-1 {
+    width: 700px; height: 700px;
+    top: -200px; left: 50%; transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(56,189,248,0.1) 0%, transparent 70%);
+    animation: glow-pulse 6s ease-in-out infinite;
+  }
+  .glow-2 {
+    width: 400px; height: 400px;
+    bottom: -100px; left: 10%;
+    background: radial-gradient(circle, rgba(129,140,248,0.08) 0%, transparent 70%);
+    animation: glow-pulse 8s ease-in-out infinite reverse;
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+    50% { opacity: .6; transform: translateX(-50%) scale(1.1); }
+  }
+
+  /* grid bg */
+  #hero::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(56,189,248,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56,189,248,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(56,189,248,0.08);
+    border: 1px solid rgba(56,189,248,0.3);
+    border-radius: 100px;
+    padding: 6px 16px 6px 10px;
+    font-size: 12px; font-weight: 600;
+    color: var(--accent); letter-spacing: 0.5px;
+    margin-bottom: 28px;
+    animation: fade-up .8s ease both;
+  }
+  .hero-badge span {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: blink 2s infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.3} }
+
+  h1 {
+    font-family: var(--font-head);
+    font-size: clamp(40px, 7vw, 86px);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -3px;
+    margin-bottom: 24px;
+    animation: fade-up .9s .1s ease both;
+  }
+  h1 .line-1 { color: var(--text); display: block; }
+  h1 .line-2 {
+    display: block;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--gold) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .hero-sub {
+    max-width: 560px; font-size: 18px;
+    color: var(--muted); margin-bottom: 40px;
+    animation: fade-up 1s .2s ease both;
+  }
+  .hero-sub strong { color: var(--text); font-weight: 500; }
+
+  .hero-btns {
+    display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+    margin-bottom: 64px;
+    animation: fade-up 1s .3s ease both;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), #0ea5e9);
+    color: #fff; border: none; border-radius: 12px;
+    padding: 16px 32px; font-size: 16px; font-weight: 600;
+    cursor: pointer; font-family: var(--font-body);
+    box-shadow: 0 0 40px rgba(56,189,248,0.35);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(56,189,248,0.5); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 32px;
+    font-size: 16px; font-weight: 600; cursor: pointer;
+    font-family: var(--font-body); transition: border-color .2s, background .2s;
+  }
+  .btn-ghost:hover { border-color: var(--accent); background: rgba(56,189,248,0.05); }
+
+  /* stats */
+  .hero-stats {
+    display: flex; gap: 48px; flex-wrap: wrap; justify-content: center;
+    animation: fade-up 1s .4s ease both;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--font-head);
+    font-size: 32px; font-weight: 900;
+    background: linear-gradient(135deg, var(--text), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .stat-label { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  /* ─── DASHBOARD PREVIEW ─── */
+  .dashboard-preview {
+    width: 100%; max-width: 900px;
+    margin: 60px auto 0;
+    border-radius: 20px;
+    border: 1px solid rgba(56,189,248,0.2);
+    background: var(--card);
+    overflow: hidden;
+    box-shadow: 0 40px 120px rgba(0,0,0,0.6), 0 0 0 1px rgba(56,189,248,0.1);
+    animation: fade-up 1s .5s ease both;
+  }
+  .db-bar {
+    background: #0d1526;
+    padding: 12px 20px;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .db-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .db-url {
+    margin-left: 12px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px; padding: 4px 16px;
+    font-size: 12px; color: var(--muted);
+    flex: 1; max-width: 300px;
+  }
+  .db-body { padding: 24px; display: grid; gap: 16px; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+  .kpi-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px;
+  }
+  .kpi-label { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+  .kpi-val {
+    font-family: var(--font-head);
+    font-size: 22px; font-weight: 800;
+    color: var(--text);
+  }
+  .kpi-change { font-size: 11px; margin-top: 4px; }
+  .up { color: var(--green); } .down { color: #f87171; }
+
+  .db-chart-row { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+  .chart-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px;
+  }
+  .chart-title { font-size: 12px; color: var(--muted); margin-bottom: 14px; font-weight: 600; }
+  .chart-bars { display: flex; align-items: flex-end; gap: 6px; height: 70px; }
+  .bar {
+    flex: 1; border-radius: 4px 4px 0 0;
+    background: linear-gradient(to top, var(--accent), rgba(56,189,248,0.3));
+    transition: height .3s;
+  }
+  .activity-list { display: flex; flex-direction: column; gap: 8px; }
+  .activity-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--muted);
+  }
+  .activity-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── SECTION COMMON ─── */
+  section { padding: 100px 5%; }
+  .section-badge {
+    display: inline-block;
+    background: rgba(129,140,248,0.1);
+    border: 1px solid rgba(129,140,248,0.3);
+    color: var(--accent2);
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; padding: 5px 14px; border-radius: 100px;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: var(--font-head);
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 900; letter-spacing: -1.5px;
+    line-height: 1.1; margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 17px; color: var(--muted);
+    max-width: 520px; line-height: 1.7;
+  }
+  .section-head { margin-bottom: 56px; }
+
+  /* ─── FEATURES ─── */
+  #features { background: var(--bg2); }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2px; }
+  .feat-card {
+    background: var(--card);
+    padding: 36px 32px;
+    transition: background .2s;
+    position: relative; overflow: hidden;
+  }
+  .feat-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0; transition: opacity .3s;
+  }
+  .feat-card:hover { background: rgba(56,189,248,0.04); }
+  .feat-card:hover::before { opacity: 1; }
+  .feat-icon {
+    font-size: 36px; margin-bottom: 16px;
+    display: block;
+  }
+  .feat-title {
+    font-family: var(--font-head);
+    font-size: 18px; font-weight: 800;
+    margin-bottom: 10px; color: var(--text);
+  }
+  .feat-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* ─── MODULES ─── */
+  #modules {}
+  .modules-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 40px; }
+  .mod-tab {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 10px 20px; border-radius: 100px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    font-family: var(--font-body); transition: all .2s;
+  }
+  .mod-tab:hover { border-color: var(--accent); color: var(--text); }
+  .mod-tab.active {
+    background: rgba(56,189,248,0.1);
+    border-color: var(--accent); color: var(--accent);
+  }
+  .mod-content {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+  }
+  .mod-info { display: none; }
+  .mod-info.active { display: contents; }
+  .mod-text h3 {
+    font-family: var(--font-head);
+    font-size: 32px; font-weight: 900; letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+  .mod-text p { font-size: 16px; color: var(--muted); line-height: 1.8; margin-bottom: 24px; }
+  .mod-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    background: rgba(56,189,248,0.08);
+    border: 1px solid rgba(56,189,248,0.2);
+    color: var(--accent);
+    font-size: 12px; padding: 5px 12px; border-radius: 6px;
+  }
+  .mod-visual {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px; padding: 28px;
+    min-height: 300px;
+    display: flex; flex-direction: column; gap: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .mod-visual-title { font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+
+  /* table mockup */
+  .mock-table { width: 100%; border-collapse: collapse; }
+  .mock-table th {
+    font-size: 10px; text-align: left; color: var(--muted);
+    padding: 8px 12px; border-bottom: 1px solid var(--border);
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .mock-table td { font-size: 12px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); }
+  .badge {
+    display: inline-block;
+    font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px;
+  }
+  .badge-green { background: rgba(52,211,153,0.15); color: var(--green); }
+  .badge-yellow { background: rgba(245,158,11,0.15); color: var(--gold); }
+  .badge-blue { background: rgba(56,189,248,0.15); color: var(--accent); }
+  .badge-red { background: rgba(248,113,113,0.15); color: #f87171; }
+
+  /* ─── PRICING ─── */
+  #pricing { background: var(--bg2); }
+  .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; max-width: 900px; }
+  .plan-card {
+    background: var(--card);
+    padding: 40px 32px;
+    position: relative; overflow: hidden;
+    transition: transform .2s;
+  }
+  .plan-card:hover { transform: translateY(-4px); }
+  .plan-card.featured {
+    background: linear-gradient(160deg, rgba(56,189,248,0.08), rgba(129,140,248,0.08));
+    border-top: 2px solid var(--accent);
+    z-index: 1;
+  }
+  .plan-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    font-size: 10px; font-weight: 800; letter-spacing: 1px;
+    padding: 4px 12px; border-radius: 100px;
+    margin-bottom: 20px; text-transform: uppercase;
+  }
+  .plan-name {
+    font-family: var(--font-head);
+    font-size: 20px; font-weight: 900; margin-bottom: 8px;
+  }
+  .plan-price {
+    font-family: var(--font-head);
+    font-size: 36px; font-weight: 900;
+    color: var(--text); margin-bottom: 4px; line-height: 1;
+  }
+  .plan-period { font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+  .plan-features li {
+    font-size: 14px; color: var(--muted);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .plan-features li::before {
+    content: '✓'; color: var(--green); font-weight: 700; font-size: 12px; flex-shrink: 0;
+  }
+  .plan-features li.no { color: #374151; }
+  .plan-features li.no::before { content: '✕'; color: #374151; }
+  .btn-plan {
+    width: 100%; padding: 14px; border-radius: 10px;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    font-family: var(--font-body); border: none;
+    transition: all .2s;
+  }
+  .btn-plan-outline {
+    background: transparent;
+    border: 1px solid var(--border); color: var(--text);
+  }
+  .btn-plan-outline:hover { border-color: var(--accent); background: rgba(56,189,248,0.05); }
+  .btn-plan-fill {
+    background: linear-gradient(135deg, var(--accent), #0ea5e9);
+    color: #fff;
+    box-shadow: 0 0 30px rgba(56,189,248,0.3);
+  }
+  .btn-plan-fill:hover { box-shadow: 0 0 50px rgba(56,189,248,0.5); transform: translateY(-1px); }
+
+  /* ─── HOW IT WORKS ─── */
+  #how { }
+  .steps-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; position: relative; }
+  .steps-grid::before {
+    content: '';
+    position: absolute; top: 40px; left: 10%; right: 10%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.3;
+  }
+  .step-card { padding: 32px 24px; text-align: center; position: relative; }
+  .step-num {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: linear-gradient(135deg, rgba(56,189,248,0.15), rgba(129,140,248,0.15));
+    border: 1px solid rgba(56,189,248,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-head); font-size: 20px; font-weight: 900; color: var(--accent);
+    margin: 0 auto 20px;
+  }
+  .step-title {
+    font-family: var(--font-head);
+    font-size: 16px; font-weight: 800; margin-bottom: 10px;
+  }
+  .step-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* ─── TESTIMONIALS ─── */
+  #reviews { background: var(--bg2); }
+  .reviews-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+  .review-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px;
+    transition: border-color .2s, transform .2s;
+  }
+  .review-card:hover { border-color: rgba(56,189,248,0.3); transform: translateY(-4px); }
+  .review-stars { color: var(--gold); font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
+  .review-text { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 20px; font-style: italic; }
+  .review-author { display: flex; align-items: center; gap: 12px; }
+  .avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    background: linear-gradient(135deg, rgba(56,189,248,0.2), rgba(129,140,248,0.2));
+    border: 1px solid var(--border);
+  }
+  .author-name { font-size: 14px; font-weight: 700; color: var(--text); }
+  .author-biz { font-size: 12px; color: var(--muted); }
+
+  /* ─── CTA ─── */
+  #cta {
+    text-align: center; padding: 120px 5%;
+    position: relative; overflow: hidden;
+  }
+  #cta::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(56,189,248,0.08), transparent);
+  }
+  #cta .section-title { color: var(--text); margin-bottom: 20px; }
+  .cta-sub { font-size: 18px; color: var(--muted); margin-bottom: 40px; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+  .email-form {
+    display: flex; gap: 12px; justify-content: center;
+    flex-wrap: wrap; max-width: 480px; margin: 0 auto 20px;
+  }
+  .email-input {
+    flex: 1; min-width: 220px;
+    background: var(--card);
+    border: 1px solid var(--border); border-radius: 12px;
+    padding: 15px 20px; color: var(--text);
+    font-size: 15px; font-family: var(--font-body);
+    outline: none; transition: border-color .2s;
+  }
+  .email-input:focus { border-color: var(--accent); }
+  .email-input::placeholder { color: var(--muted); }
+  .cta-note { font-size: 12px; color: var(--muted); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 48px 5% 32px;
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px;
+  }
+  .footer-brand p { font-size: 14px; color: var(--muted); margin-top: 12px; line-height: 1.7; max-width: 260px; }
+  .footer-col h4 {
+    font-family: var(--font-head);
+    font-size: 13px; font-weight: 800;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 16px;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .footer-col ul a { color: var(--muted); text-decoration: none; font-size: 14px; transition: color .2s; }
+  .footer-col ul a:hover { color: var(--text); }
+  .footer-bottom {
+    padding: 20px 5% 0;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-bottom p { font-size: 13px; color: var(--muted); }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .kpi-row { grid-template-columns: repeat(2,1fr); }
+    .db-chart-row { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+    .steps-grid { grid-template-columns: repeat(2,1fr); }
+    .reviews-grid { grid-template-columns: 1fr; }
+    footer { grid-template-columns: 1fr 1fr; }
+    .mod-content { grid-template-columns: 1fr; }
+    nav .nav-links { display: none; }
+  }
+  @media (max-width: 600px) {
+    .steps-grid { grid-template-columns: 1fr; }
+    footer { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: #1e2a3a; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav>
+  <div class="nav-logo">NazoratPro</div>
+  <ul class="nav-links">
+    <li><a href="#features">Imkoniyatlar</a></li>
+    <li><a href="#modules">Modullar</a></li>
+    <li><a href="#pricing">Narxlar</a></li>
+    <li><a href="#reviews">Fikrlar</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Bepul Boshlash →</button>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section id="hero">
+  <div class="hero-glow glow-1"></div>
+  <div class="hero-glow glow-2"></div>
+
+  <div class="hero-badge"><span></span> O'zbekiston #1 biznes boshqaruv platformasi</div>
+
+  <h1>
+    <span class="line-1">Biznesingizni</span>
+    <span class="line-2">aqlli boshqaring</span>
+  </h1>
+
+  <p class="hero-sub">
+    Savdo, ombor, xodimlar va mijozlarni <strong>bir platformada</strong> boshqaring.
+    Sun'iy intellekt yordamida daromadingizni <strong>2x oshiring.</strong>
+  </p>
+
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">14 kun bepul sinab ko'ring →</button>
+    <button class="btn-ghost" onclick="document.getElementById('modules').scrollIntoView({behavior:'smooth'})">▶ Demo ko'rish</button>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">2,400+</div><div class="stat-label">Faol biznes</div></div>
+    <div class="stat"><div class="stat-num">98%</div><div class="stat-label">Mijoz mamnuniyati</div></div>
+    <div class="stat"><div class="stat-num">4.2×</div><div class="stat-label">Samaradorlik o'sishi</div></div>
+    <div class="stat"><div class="stat-num">99.9%</div><div class="stat-label">Uptime kafolati</div></div>
+  </div>
+
+  <!-- Dashboard mockup -->
+  <div class="dashboard-preview">
+    <div class="db-bar">
+      <div class="db-dot" style="background:#f87171"></div>
+      <div class="db-dot" style="background:#fbbf24"></div>
+      <div class="db-dot" style="background:#34d399"></div>
+      <div class="db-url">app.nazoratpro.uz/dashboard</div>
+    </div>
+    <div class="db-body">
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-label">Bugungi Savdo</div>
+          <div class="kpi-val">12,480,000</div>
+          <div class="kpi-change up">↑ 18.4% o'sdi</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Buyurtmalar</div>
+          <div class="kpi-val">247</div>
+          <div class="kpi-change up">↑ 32 ta yangi</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Faol Mijozlar</div>
+          <div class="kpi-val">1,839</div>
+          <div class="kpi-change up">↑ 5.2% oy</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Ombor Holati</div>
+          <div class="kpi-val">94%</div>
+          <div class="kpi-change down">↓ 3 ta kam</div>
+        </div>
+      </div>
+      <div class="db-chart-row">
+        <div class="chart-card">
+          <div class="chart-title">Haftalik Daromad Tendensiyasi</div>
+          <div class="chart-bars">
+            <div class="bar" style="height:45%"></div>
+            <div class="bar" style="height:62%"></div>
+            <div class="bar" style="height:38%"></div>
+            <div class="bar" style="height:78%"></div>
+            <div class="bar" style="height:55%"></div>
+            <div class="bar" style="height:90%"></div>
+            <div class="bar" style="height:72%"></div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">So'nggi Buyurtmalar</div>
+          <div class="activity-list">
+            <div class="activity-item"><div class="activity-dot" style="background:#34d399"></div> #0241 — Bajarildi · 450,000</div>
+            <div class="activity-item"><div class="activity-dot" style="background:#f59e0b"></div> #0240 — Jarayonda · 890,000</div>
+            <div class="activity-item"><div class="activity-dot" style="background:#38bdf8"></div> #0239 — Yangi · 230,000</div>
+            <div class="activity-item"><div class="activity-dot" style="background:#34d399"></div> #0238 — Bajarildi · 1,200,000</div>
+            <div class="activity-item"><div class="activity-dot" style="background:#34d399"></div> #0237 — Bajarildi · 670,000</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FEATURES ═══════════ -->
+<section id="features">
+  <div class="section-head reveal">
+    <div class="section-badge">Imkoniyatlar</div>
+    <h2 class="section-title">Hamma narsa bir joyda</h2>
+    <p class="section-sub">Boshqa ilovalar o'rnatishga hojat yo'q. NazoratPro sizga kerak bo'lgan barcha narsani beradi.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card reveal"><span class="feat-icon">🤖</span><div class="feat-title">AI Tavsiyalar</div><p class="feat-desc">Sun'iy intellekt sizning savdo ma'lumotlaringizni tahlil qilib, daromadni oshirish bo'yicha aniq tavsiyalar beradi.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">📦</span><div class="feat-title">Aqlli Ombor</div><p class="feat-desc">Barcode skanerlash, avtomatik qayta buyurtma va real vaqt ombor holati. Kamomad hech qachon bo'lmaydi.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">💳</span><div class="feat-title">O'zbekiston To'lovlari</div><p class="feat-desc">Payme, Click, Uzcard — barcha mahalliy to'lov tizimlari bilan bir tugmada integratsiya.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">👥</span><div class="feat-title">Mijoz Sodiqlik</div><p class="feat-desc">CRM, sodiqlik ballari, avtomatik SMS kampaniyalar va segmentatsiya bilan mijozlarni saqlab qoling.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">📊</span><div class="feat-title">Chuqur Analitika</div><p class="feat-desc">Interaktiv grafiklar, AI prognozlash va PDF/Excel hisobotlar. Ma'lumotga asoslanib qaror qiling.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">📱</span><div class="feat-title">Mobil Ilova</div><p class="feat-desc">iOS va Android uchun to'liq funksional ilova. Biznesingizni istalgan joydan boshqaring.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">👨‍💼</span><div class="feat-title">HR & Xodimlar</div><p class="feat-desc">Ish jadvali, maosh avtomatik hisoblash, bonus va KPI tizimi. Jamoangizni samarali boshqaring.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🔐</span><div class="feat-title">Bank Darajasi Xavfsizlik</div><p class="feat-desc">AES-256 shifrlash, ikki faktorli autentifikatsiya va to'liq audit jurnali. Ma'lumotlaringiz xavfsiz.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🌐</span><div class="feat-title">Ko'p Til</div><p class="feat-desc">O'zbek, Rus va Ingliz tillari. Har bir xodim o'z tilida ishlaydi.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════ MODULES ═══════════ -->
+<section id="modules">
+  <div class="section-head reveal">
+    <div class="section-badge">Modullar</div>
+    <h2 class="section-title">Har bir modul — kuchli vosita</h2>
+    <p class="section-sub">7 ta to'liq modul, har biri mustaqil va bir-biriga ulangan.</p>
+  </div>
+
+  <div class="modules-tabs reveal" id="modTabs">
+    <button class="mod-tab active" onclick="switchMod(0)">🏠 Dashboard</button>
+    <button class="mod-tab" onclick="switchMod(1)">📦 Ombor</button>
+    <button class="mod-tab" onclick="switchMod(2)">🧾 Buyurtmalar</button>
+    <button class="mod-tab" onclick="switchMod(3)">👥 Mijozlar</button>
+    <button class="mod-tab" onclick="switchMod(4)">👨‍💼 Xodimlar</button>
+    <button class="mod-tab" onclick="switchMod(5)">📊 Analitika</button>
+  </div>
+
+  <div class="mod-content" id="modContent">
+
+    <!-- 0: Dashboard -->
+    <div class="mod-info active">
+      <div class="mod-text">
+        <h3>Bosh sahifa</h3>
+        <p>Barcha muhim ko'rsatkichlar bir ekranda. Real vaqt KPI kartochkalar, grafik tendensiyalar va AI tavsiyalar. Biznesingizning bugungi holati bir qarashda.</p>
+        <div class="mod-tags"><span class="tag">Real vaqt</span><span class="tag">KPI kartochkalar</span><span class="tag">AI tavsiyalar</span><span class="tag">Tezkor harakatlar</span></div>
+      </div>
+      <div class="mod-visual">
+        <div class="mod-visual-title">📊 Bugungi ko'rsatkichlar</div>
+        <table class="mock-table">
+          <tr><th>Ko'rsatkich</th><th>Qiymat</th><th>O'zgarish</th></tr>
+          <tr><td>Savdo</td><td>12,480,000 so'm</td><td style="color:#34d399">↑ 18%</td></tr>
+          <tr><td>Buyurtmalar</td><td>247 ta</td><td style="color:#34d399">↑ 32</td></tr>
+          <tr><td>Mijozlar</td><td>1,839 ta</td><td style="color:#34d399">↑ 5%</td></tr>
+          <tr><td>Ombor</td><td>94% to'liq</td><td style="color:#f87171">↓ 3 ta</td></tr>
+        </table>
+        <div style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.2);border-radius:8px;padding:12px;font-size:12px;color:#38bdf8">🤖 AI: Shanba va yakshanba kunlari savdo 40% oshadi. Oldindan zaxira to'ldiring.</div>
+      </div>
+    </div>
+
+    <!-- 1: Ombor -->
+    <div class="mod-info">
+      <div class="mod-text">
+        <h3>Ombor & Mahsulotlar</h3>
+        <p>Barcode yoki QR orqali mahsulot skanerlash, ko'p omborxona boshqaruvi, avtomatik qayta buyurtma ogohlantirishlari va partiyali import/eksport.</p>
+        <div class="mod-tags"><span class="tag">Barcode skanerlash</span><span class="tag">Avtomatik buyurtma</span><span class="tag">Ko'p ombor</span><span class="tag">Excel import</span></div>
+      </div>
+      <div class="mod-visual">
+        <div class="mod-visual-title">📦 Mahsulotlar ro'yxati</div>
+        <table class="mock-table">
+          <tr><th>Mahsulot</th><th>Qoldiq</th><th>Holat</th></tr>
+          <tr><td>Samsung A55</td><td>142 ta</td><td><span class="badge badge-green">Yetarli</span></td></tr>
+          <tr><td>iPhone 15</td><td>12 ta</td><td><span class="badge badge-yellow">Kam</span></td></tr>
+          <tr><td>Xiaomi Pad 6</td><td>3 ta</td><td><span class="badge badge-red">Kritik</span></td></tr>
+          <tr><td>AirPods Pro</td><td>78 ta</td><td><span class="badge badge-green">Yetarli</span></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 2: Buyurtmalar -->
+    <div class="mod-info">
+      <div class="mod-text">
+        <h3>Buyurtmalar & Hisob-faktura</h3>
+        <p>Bir bosish bilan hisob-faktura yaratish, Payme/Click orqali to'lov qabul qilish, QQS avtomatik hisoblash va takroriy hisob-faktura shablonlari.</p>
+        <div class="mod-tags"><span class="tag">Tezkor faktura</span><span class="tag">Payme & Click</span><span class="tag">QQS hisobi</span><span class="tag">Shablonlar</span></div>
+      </div>
+      <div class="mod-visual">
+        <div class="mod-visual-title">🧾 Buyurtmalar holati</div>
+        <table class="mock-table">
+          <tr><th>#</th><th>Mijoz</th><th>Summa</th><th>Holat</th></tr>
+          <tr><td>#0241</td><td>Akbar do'koni</td><td>450,000</td><td><span class="badge badge-green">Bajarildi</span></td></tr>
+          <tr><td>#0240</td><td>Sarvar savdo</td><td>890,000</td><td><span class="badge badge-yellow">Jarayonda</span></td></tr>
+          <tr><td>#0239</td><td>Nargiza LLC</td><td>230,000</td><td><span class="badge badge-blue">Yangi</span></td></tr>
+          <tr><td>#0238</td><td>Top Market</td><td>1,200,000</td><td><span class="badge badge-green">Bajarildi</span></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3: Mijozlar -->
+    <div class="mod-info">
+      <div class="mod-text">
+        <h3>Mijozlar (CRM)</h3>
+        <p>Har bir mijozning to'liq profili, xarid tarixi, sodiqlik ballari va avtomatik SMS/email kampaniyalar. Mijozlarni segmentlash va maqsadli marketing.</p>
+        <div class="mod-tags"><span class="tag">Mijoz profili</span><span class="tag">Sodiqlik ballari</span><span class="tag">SMS kampaniya</span><span class="tag">Segmentatsiya</span></div>
+      </div>
+      <div class="mod-visual">
+        <div class="mod-visual-title">👥 Top mijozlar</div>
+        <table class="mock-table">
+          <tr><th>Mijoz</th><th>Ball</th><th>Xaridlar</th></tr>
+          <tr><td>Akbar Toshmatov</td><td>⭐ 1,240</td><td>48 ta</td></tr>
+          <tr><td>Malika Yusupova</td><td>⭐ 980</td><td>31 ta</td></tr>
+          <tr><td>Jahongir Ergashev</td><td>⭐ 860</td><td>27 ta</td></tr>
+          <tr><td>Zulfiya Nazarova</td><td>⭐ 720</td><td>19 ta</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 4: Xodimlar -->
+    <div class="mod-info">
+      <div class="mod-text">
+        <h3>Xodimlar & HR</h3>
+        <p>Xodimlar ro'yxati, ish jadvali planlash, maosh avtomatik hisoblash, bonus tizimi va faoliyatni baholash. Jamoa boshqaruvini osonlashtiring.</p>
+        <div class="mod-tags"><span class="tag">Ish jadvali</span><span class="tag">Maosh hisobi</span><span class="tag">Bonus tizimi</span><span class="tag">KPI baholash</span></div>
+      </div>
+      <div class="mod-visual">
+        <div class="mod-visual-title">👨‍💼 Xodimlar holati</div>
+        <table class="mock-table">
+          <tr><th>Xodim</th><th>Lavozim</th><th>Holat</th></tr>
+          <tr><td>Otabek Karimov</td><td>Kassa</td><td><span class="badge badge-green">Ish joyida</span></td></tr>
+          <tr><td>Dilnoza Saidova</td><td>Menejer</td><td><span class="badge badge-green">Ish joyida</span></td></tr>
+          <tr><td>Sherzod Umarov</td><td>Omborchi</td><td><span class="badge badge-yellow">Ta'tilda</span></td></tr>
+          <tr><td>Mohira Xoliqova</td><td>Kassir</td><td><span class="badge badge-green">Ish joyida</span></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 5: Analitika -->
+    <div class="mod-info">
+      <div class="mod-text">
+        <h3>Analitika & Hisobotlar</h3>
+        <p>Chuqur tahlil vositalari: daromad tendensiyalari, top mahsulotlar, eng faol mijozlar, AI prognozlash va PDF/Excel eksport.</p>
+        <div class="mod-tags"><span class="tag">Interaktiv grafik</span><span class="tag">AI prognoz</span><span class="tag">PDF eksport</span><span class="tag">Maxsus filtr</span></div>
+      </div>
+      <div class="mod-visual">
+        <div class="mod-visual-title">📊 Oylik tahlil</div>
+        <table class="mock-table">
+          <tr><th>Ko'rsatkich</th><th>Bu oy</th><th>O'tgan oy</th></tr>
+          <tr><td>Jami savdo</td><td>284M so'm</td><td style="color:#34d399">+22%</td></tr>
+          <tr><td>Yangi mijozlar</td><td>143 ta</td><td style="color:#34d399">+18%</td></tr>
+          <tr><td>Top mahsulot</td><td>Samsung A55</td><td>—</td></tr>
+          <tr><td>O'rtacha chek</td><td>1,150,000</td><td style="color:#34d399">+8%</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ HOW IT WORKS ═══════════ -->
+<section id="how" style="background:var(--bg2)">
+  <div class="section-head reveal" style="text-align:center; align-items:center; display:flex; flex-direction:column;">
+    <div class="section-badge">Boshlash</div>
+    <h2 class="section-title">5 daqiqada ishga tushiring</h2>
+    <p class="section-sub" style="text-align:center">Murakkab o'rnatish yo'q. Brauzer orqali kirib, biznesingizni sozlang.</p>
+  </div>
+  <div class="steps-grid reveal">
+    <div class="step-card"><div class="step-num">1</div><div class="step-title">Ro'yxatdan o'ting</div><p class="step-desc">Email yoki telefon raqamingiz bilan 30 soniyada hisob yarating.</p></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-title">Biznesni sozlang</div><p class="step-desc">Kompaniya nomi, kategoriya va asosiy sozlamalarni kiriting.</p></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-title">Ma'lumot import</div><p class="step-desc">Excel yoki CSV dan mahsulotlar va mijozlarni bir zumda yuklang.</p></div>
+    <div class="step-card"><div class="step-num">4</div><div class="step-title">Ishga kirishing!</div><p class="step-desc">Hamma narsa tayyor. Birinchi buyurtmangizni qabul qilishni boshlang.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════ PRICING ═══════════ -->
+<section id="pricing">
+  <div class="section-head reveal" style="text-align:center;align-items:center;display:flex;flex-direction:column;">
+    <div class="section-badge">Narxlar</div>
+    <h2 class="section-title">Biznesingizga mos narx</h2>
+    <p class="section-sub" style="text-align:center">14 kun bepul sinab ko'ring. Karta ma'lumotlari talab qilinmaydi.</p>
+  </div>
+  <div class="pricing-grid reveal" style="margin:0 auto;">
+    <div class="plan-card">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price">149 000</div>
+      <div class="plan-period">so'm / oyiga</div>
+      <ul class="plan-features">
+        <li>1 foydalanuvchi</li>
+        <li>500 ta mahsulot</li>
+        <li>Buyurtma & faktura</li>
+        <li>Asosiy hisobotlar</li>
+        <li>Email qo'llab-quvvatlash</li>
+        <li class="no">CRM moduli</li>
+        <li class="no">AI tavsiyalar</li>
+        <li class="no">Mobil ilova</li>
+      </ul>
+      <button class="btn-plan btn-plan-outline">Bepul Boshlash</button>
+    </div>
+
+    <div class="plan-card featured">
+      <div class="plan-badge">⭐ Eng Mashhur</div>
+      <div class="plan-name">Business</div>
+      <div class="plan-price">449 000</div>
+      <div class="plan-period">so'm / oyiga</div>
+      <ul class="plan-features">
+        <li>10 foydalanuvchi</li>
+        <li>Cheksiz mahsulot</li>
+        <li>Barcha modullar</li>
+        <li>CRM & HR moduli</li>
+        <li>🤖 AI tavsiyalar</li>
+        <li>📱 Mobil ilova</li>
+        <li>24/7 chat qo'llab-quvvatlash</li>
+        <li>Maxsus hisobotlar</li>
+      </ul>
+      <button class="btn-plan btn-plan-fill">14 Kun Bepul →</button>
+    </div>
+
+    <div class="plan-card">
+      <div class="plan-name">Enterprise</div>
+      <div class="plan-price" style="font-size:26px;">Maxsus<br>narx</div>
+      <div class="plan-period">har oyda kelishiladi</div>
+      <ul class="plan-features">
+        <li>Cheksiz foydalanuvchi</li>
+        <li>Dedicated server</li>
+        <li>Maxsus AI modeli</li>
+        <li>Maxsus integratsiyalar</li>
+        <li>SLA kafolati (99.9%)</li>
+        <li>Shaxsiy menejer</li>
+        <li>Korporativ treninglar</li>
+        <li>Manba kodi (opsional)</li>
+      </ul>
+      <button class="btn-plan btn-plan-outline" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Bog'lanish</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ REVIEWS ═══════════ -->
+<section id="reviews">
+  <div class="section-head reveal" style="text-align:center;align-items:center;display:flex;flex-direction:column;">
+    <div class="section-badge">Mijozlar Fikrlari</div>
+    <h2 class="section-title">Ular allaqachon ishlaydi</h2>
+    <p class="section-sub" style="text-align:center">2,400+ biznes NazoratPro bilan ishini osonlashtirdi.</p>
+  </div>
+  <div class="reviews-grid reveal">
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Avval 3 ta dastur ishlatardim — kassir, ombor va buxgalteriya. NazoratPro hammasini bir joyga to'pladi. Oyiga 2 soat vaqt tejayapman."</p>
+      <div class="review-author"><div class="avatar">👨</div><div><div class="author-name">Akbar Toshmatov</div><div class="author-biz">Telefon aksessuarlari do'koni · Toshkent</div></div></div>
+    </div>
+    <div class="review-card" style="border-color:rgba(56,189,248,0.2)">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"AI tavsiyalar rostdan ishlaydi! Dastur aytgan mahsulotlarni ko'paytirdim — savdo 35% oshdi. Bu sarmoyaning eng yaxshi qaytimi."</p>
+      <div class="review-author"><div class="avatar">👩</div><div><div class="author-name">Malika Yusupova</div><div class="author-biz">Kiyim-kechak butigi · Samarqand</div></div></div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Xodimlarni boshqarish va maosh hisoblash endilikda avtomatik. HR moduli juda qulay. Texnik qo'llab-quvvatlash ham juda tez javob beradi."</p>
+      <div class="review-author"><div class="avatar">👨‍💼</div><div><div class="author-name">Jahongir Ergashev</div><div class="author-biz">Supermarket zanjiri · Buxoro</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA ═══════════ -->
+<section id="cta">
+  <div class="section-badge reveal" style="display:inline-block">Bepul Sinov</div>
+  <h2 class="section-title reveal" style="max-width:600px;margin:12px auto 0">Biznesingizni bugunoq boshqaring</h2>
+  <p class="cta-sub reveal">14 kun bepul. Kredit karta talab qilinmaydi. Istalgan vaqt bekor qilish mumkin.</p>
+  <div class="email-form reveal">
+    <input class="email-input" type="email" placeholder="email@biznes.uz" id="emailInput"/>
+    <button class="btn-primary" onclick="handleSignup()">Boshlash →</button>
+  </div>
+  <p class="cta-note reveal">✓ 5 daqiqada tayyor &nbsp; ✓ O'rnatish talab qilinmaydi &nbsp; ✓ 24/7 qo'llab-quvvatlash</p>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <div class="footer-brand">
+    <div class="nav-logo">NazoratPro</div>
+    <p>O'zbekistonning eng aqlli biznes boshqaruv platformasi. Kichik va o'rta bizneslar uchun mo'ljallangan.</p>
+    <p style="margin-top:16px;font-size:13px;color:#374151">🇺🇿 Toshkent, O'zbekiston</p>
+  </div>
+  <div class="footer-col">
+    <h4>Mahsulot</h4>
+    <ul>
+      <li><a href="#">Imkoniyatlar</a></li>
+      <li><a href="#">Narxlar</a></li>
+      <li><a href="#">API</a></li>
+      <li><a href="#">Yangilanishlar</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Kompaniya</h4>
+    <ul>
+      <li><a href="#">Biz haqimizda</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">Ish o'rinlari</a></li>
+      <li><a href="#">Hamkorlik</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Yordam</h4>
+    <ul>
+      <li><a href="#">Hujjatlar</a></li>
+      <li><a href="#">Video darslar</a></li>
+      <li><a href="#">Telegram kanali</a></li>
+      <li><a href="#">Bog'lanish</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>© 2025 NazoratPro. Barcha huquqlar himoyalangan.</p>
+  <p>Maxfiylik siyosati · Foydalanish shartlari</p>
+</div>
+
+<!-- ═══════════ SCRIPTS ═══════════ -->
+<script>
+  // Module tabs
+  function switchMod(idx) {
+    const tabs = document.querySelectorAll('.mod-tab');
+    const infos = document.querySelectorAll('.mod-info');
+    tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
+    infos.forEach((info, i) => info.classList.toggle('active', i === idx));
+  }
+
+  // Signup
+  function handleSignup() {
+    const email = document.getElementById('emailInput').value;
+    if (!email || !email.includes('@')) {
+      alert('Iltimos, to\'g\'ri email kiriting.');
+      return;
+    }
+    alert(`✅ Rahmat! ${email} ga tasdiqlash xati yuborildi.\n14 kunlik bepul sinov boshlandi!`);
+    document.getElementById('emailInput').value = '';
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Animate bars on load
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.bar').forEach((bar, i) => {
+      setTimeout(() => {
+        bar.style.transition = 'height 0.6s ease';
+      }, i * 80);
+    });
+  });
+</script>
+</body>
+</html>
